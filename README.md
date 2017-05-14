@@ -1,2 +1,2 @@
 # shops-react
-react , firebase , google geocoder, add remove shops
+Example of usage react with firebase.
