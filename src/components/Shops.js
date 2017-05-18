@@ -1,6 +1,5 @@
 import React from 'react'
 import { deleteShop } from '../database';
-import Header from './Header';
 import LoadingSpinner from './LoadingSpinner';
 
 class Shops extends React.Component{
@@ -35,7 +34,7 @@ handleOnSearch(event){
 render(){
 
     const{ selectedShop,searchText} = this.state;
-    const { history, user, shops, isLoading } = this.props;
+    const { shops, isLoading } = this.props;
     const filteredShops = shops.filter( e => {
         return e.name.toLowerCase().search(searchText.toLowerCase()) !== -1;
         });
@@ -58,7 +57,6 @@ render(){
 
     return(
         <div>
-            <Header history={history} user={user}/>
             <div class="container">
                 { isLoading ? <LoadingSpinner/>
                 :<div>

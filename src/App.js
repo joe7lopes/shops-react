@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Shops from './components/Shops';
 import NewShop from './components/NewShop';
 import NotFound from './components/NotFound';
+import Header from './components/Header';
 
 class App extends React.Component{ 
   constructor() {
@@ -74,17 +75,28 @@ addShops(snapshot){
   
 }
 
-const renderMergedProps = (component, ...rest) => {
-  const finalProps = Object.assign({}, ...rest);
+// const renderMergedProps = (component, ...rest) => {
+//   const finalProps = Object.assign({}, ...rest);
+//   return (
+//     React.createElement(component, finalProps)
+//   );
+// }
+
+const renderRoutesWithHeader = (Component, rest, props ) =>{
+  const {user} = rest;
   return (
-    React.createElement(component, finalProps)
+      <div>
+        <Header user={user} {...props} />
+        <Component {...rest}/>
+     </div>
   );
 }
 
-const PrivateRoute = ({ component, ...rest }) => (
+const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={ props => (
     isAuthenticated() ? (
-      renderMergedProps(component,props,rest)
+      //renderMergedProps(component,props,rest)
+      renderRoutesWithHeader(Component, rest, props)
     ) : (
       <Redirect to={{
         pathname: '/login',

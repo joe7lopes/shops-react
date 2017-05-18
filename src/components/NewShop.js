@@ -1,6 +1,5 @@
 import React from 'react';
 import { saveShop } from '../database';
-import Header from './Header';
 import SuccessAlert from './SuccessAlert';
 import FailureAlert from './SuccessAlert';
 import ProgressModal from './ProgressModal';
@@ -55,6 +54,7 @@ saveShop(shop,()=>{
         this.showFailureAlertMessage();
     },(progress)=>{
         //progress
+        console.log(progress);
         this.setState({uploadProgress:progress});
     });
     
@@ -109,10 +109,8 @@ handleMapOnChange(coodinates){
 
 render() {
         const { name, showSuccess, showFailure, imagePreviewUrl, uploadProgress ,address, renderMap} = this.state;
-        const {user} = this.props;
         return (
             <div>
-                <Header user={user}/>
                 <div class="container">
                     <div class="row">
                         {showSuccess ? <SuccessAlert shopName={name} /> : "" }
