@@ -4,26 +4,45 @@ export const getShops = (callback) =>{
     return  dbRef.once('value');
 }
 
-export function saveShop(shop,successCb,error,progressCb) {
+export function saveShop(shop,success,error,progressCb) {
      const newShopRef = dbRef.push();
-     const shopId= newShopRef.key;
+     shop.id = newShopRef.key;
 
-     var uploadTask = storageRef.child(shopId).put(shop.image);
+     if(shop.image){
+         return saveShopWithImage(shop,newShopRef,success,error,progressCb);
+     }else{
+         saveShopWIthNoImage(shop,newShopRef,success,error);
+     }
+
+     
+}
+
+function saveShopWithImage(shop,newShopRef,successCb,error,progressCb){
+
+var uploadTask = storageRef.child(shop.id).put(shop.image);
 
     return  uploadTask.on('state_changed',snapshot =>{
         var uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;    
-        let uploadProgress2 = Math.round(uploadProgress);
-        console.log(uploadProgress2);
-        progressCb(uploadProgress2);
+        let uploadProgressRounded = Math.round(uploadProgress);
+        progressCb(uploadProgressRounded);
     }, error,
     success =>{
         //save to database
         var downloadURL = uploadTask.snapshot.downloadURL;  
         shop.imageUrl= downloadURL;
-        shop.id = shopId;
-        newShopRef.set(shop).then(()=>{
-            successCb();
-        });
+
+        saveShopWIthNoImage(shop,newShopRef,success,error);
+
+    });
+
+}
+
+
+function saveShopWIthNoImage(shop,newShopRef,success,errorCb){
+    newShopRef.set(shop).then(()=>{
+            success();
+    }).catch(error =>{
+        errorCb(error.message);
     });
 }
 

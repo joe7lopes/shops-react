@@ -11,42 +11,47 @@ constructor() {
  super();
     this.state = {
         name:null,
-        address:null,
         comments:null,
         image:null,
         showSuccess:false,
         showFailure:false,
         timeout:null,
         uploadProgress:0,
-        lat:"",
-        lng:""
+        renderMap: false,
+        address:{
+            name: null,
+            lat: '',
+            lng: ''
+        },
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleOnchage = this.handleOnchage.bind(this);
+    this.handleGenericFieldOnchage = this.handleGenericFieldOnchage.bind(this);
     this.handleImageOnChange = this.handleImageOnChange.bind(this);
-    this.handleAddressChanged = this.handleAddressChanged.bind(this);
+    this.handleMapOnChange = this.handleMapOnChange.bind(this);
+    this.handleAddressNameOnChange = this.handleAddressNameOnChange.bind(this);
 }
 
 componentWillUnmount(){
     clearTimeout(this.state.timeout);
 }
 
- handleOnchage(event) {
+ handleGenericFieldOnchage(event) {
     const {id, value} = event.target;
     this.setState({[id]: value});
 }
 
 handleSubmit(event){
  event.preventDefault();
- const {name, address, comments, image, lat, lng} = this.state;
- const shop = { name, address, comments, image, lat, lng };
+ const {name, address, comments, image} = this.state;
+ const shop = { name, address, comments, image};
  
 saveShop(shop,()=>{
     //success
         this.showSuccessAlertMessage();
-    },()=>{
+    },(message)=>{
         //error
+        //TODO handle message
         this.showFailureAlertMessage();
     },(progress)=>{
         //progress
@@ -87,22 +92,30 @@ handleImageOnChange(event){
     reader.readAsDataURL(image);
 }
 
-handleAddressChanged(coodinates){
-    this.setState({
-        lat:coodinates.lat(),
-        lng:coodinates.lng()
-    });
+handleAddressNameOnChange(event){
+    const addressName = event.target.value;
+    const address = Object.assign({},this.state.address);
+    address.name = addressName;
+    this.setState({address: address, renderMap:true});
+}
+
+handleMapOnChange(coodinates){
+    const address = Object.assign({},  this.state.address);
+    address.lat = coodinates.lat();
+    address.lng = coodinates.lng();
+
+    this.setState({address: address, renderMap:false});
 }
 
 render() {
-        const {showSuccess, showFailure, imagePreviewUrl, uploadProgress, address, lat ,lng} = this.state;
+        const { name, showSuccess, showFailure, imagePreviewUrl, uploadProgress ,address, renderMap} = this.state;
         const {user} = this.props;
         return (
             <div>
                 <Header user={user}/>
                 <div class="container">
                     <div class="row">
-                        {showSuccess ? <SuccessAlert/> : "" }
+                        {showSuccess ? <SuccessAlert shopName={name} /> : "" }
                         {showFailure ? <FailureAlert/> : "" }
                         <form onSubmit={this.handleSubmit}>
                             <div class="col-md-4">
@@ -113,14 +126,14 @@ render() {
                                         type="text"
                                         class="form-control"
                                         placeholder="Nome da Loja"
-                                        onChange={this.handleOnchage}/>
+                                        onChange={this.handleGenericFieldOnchage}/>
                                 </div>
                                 <div class="form-group">
                                     <label for="address">Morada</label>
-                                    <input id="address" type="text" class="form-control" placeholder="Morada" onChange={this.handleOnchage}/>
+                                    <input id="address" type="text" class="form-control" placeholder="Morada" onChange={this.handleAddressNameOnChange}/>
                                     <div class="form-inline">
-                                        <input ref="address-lat"  type="text" class="form-control" placeholder="Lat" value={lat} readOnly/>
-                                        <input ref="address-long" type="text" class="form-control" placeholder="Long" value={lng} readOnly/>
+                                        <input ref="address-lat"  type="text" class="form-control" style={{width:"50%"}} placeholder="Lat" value={address.lat} readOnly/>
+                                        <input ref="address-long" type="text" class="form-control" style={{width:"50%"}} placeholder="Long" value={address.lng} readOnly/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -130,7 +143,7 @@ render() {
                                         class="form-control"
                                         rows="3"
                                         placeholder="Comentários"
-                                        onChange={this.handleOnchage}></textarea>
+                                        onChange={this.handleGenericFieldOnchage}></textarea>
                                 </div>
                                 <div class="checkbox">
                                     <label>
@@ -154,11 +167,13 @@ render() {
                             </div>
                         </div>
                         <div class="col-md-4">
-                             <Map address={address} onChange={this.handleAddressChanged}/>
+                             <Map address={address} render={renderMap} onChange={this.handleMapOnChange}/>
                         </div>
                     </div>
                 </div>
-                <ProgressModal progress={uploadProgress}/>
+                {uploadProgress > 0 ?
+                    <ProgressModal progress={uploadProgress}/>
+                :''}
             </div>
 
         );

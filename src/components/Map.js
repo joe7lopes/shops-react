@@ -23,30 +23,37 @@ class Map extends React.Component{
 componentDidMount(){
     this.geocoder = new google.maps.Geocoder();
     this.map = new google.maps.Map(this.refs.map,mapOptions);
+    google.maps.event.addListener(this.map,'click', event =>{
+        this.addSingleMarker(event.latLng,this.map);
+    })
 }
 
 componentWillReceiveProps(nextProps) {
-    if(nextProps.address){
-        this.codeAddress(nextProps.address);
+    if(nextProps.render){
+        this.codeAddress(nextProps.address.name);
     }
+}
+
+addSingleMarker(position,map){
+    this.clearMakers();
+    
+    const marker = new google.maps.Marker({
+        map:map,
+        position: position
+    });
+
+    const {markers} = this.state;
+    markers.push(marker);
+    this.setState({markers:markers})
+    this.props.onChange(position);
 }
 
 codeAddress(address){
    this.geocoder.geocode({'address':address}, (results, status) =>{
         if(status === 'OK'){
-            this.clearMakers();
             const position = results[0].geometry.location;
             this.map.setCenter(position);
-            
-            const marker = new google.maps.Marker({
-                map:this.map,
-                position: position
-            });
-
-            const {markers} = this.state;
-            markers.push(marker);
-            this.setState({markers:markers})
-            this.props.onChange(position);
+            this.addSingleMarker(position,this.map);
         }else{
             //console.log("address not found");
         }
@@ -58,6 +65,7 @@ clearMakers(){
     for(var i = 0; i < markers.length; i++ ){
         markers[i].setMap(null);
     }
+    this.setState({markers: []});
 }
 
     render(){

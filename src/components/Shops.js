@@ -49,7 +49,7 @@ render(){
                     : "No image"}
                 </td>
                 <td>{shop.name}</td>
-                <td>{shop.address}</td>
+                <td>{shop.address.name}</td>
                 <td>{shop.comments}</td>
                 <td> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" onClick={this.handleOnSelectShop.bind(this,shop)}>Eliminar</button></td>
             </tr>   

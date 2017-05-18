@@ -1,9 +1,8 @@
 import React from 'react';
 
-const SuccessAlert = () => (
+const SuccessAlert = ({shopName}) => (
     <div class="alert alert-success">
-        <strong>Success!</strong>
-            alert success
+        <strong>Shop {shopName} saved!</strong>
     </div>
 );
 
