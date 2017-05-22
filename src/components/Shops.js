@@ -43,12 +43,12 @@ render(){
         return (
             <tr key={shop.id}>
                 <th>{shop.id}</th>
-                <td>{shop.imageUrl ?
-                    <img src={shop.imageUrl} alt={shop.name} style={{with:"100px", height:"100px"}}/>
-                    : "No image"}
-                </td>
                 <td>{shop.name}</td>
                 <td>{shop.address.name}</td>
+                <td>{shop.imageUrl ?
+                    <img src={shop.imageUrl} alt={shop.name} style={{with:"50px", height:"50px"}}/>
+                    : "No image"}
+                </td>
                 <td>{shop.comments}</td>
                 <td> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" onClick={this.handleOnSelectShop.bind(this,shop)}>Eliminar</button></td>
             </tr>   
@@ -70,9 +70,9 @@ render(){
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Image</th>
                                 <th>Nome</th>
                                 <th>Morada</th>
+                                 <th>Image</th>
                                 <th>Comentatios</th>
                                 <th></th>
                             </tr>

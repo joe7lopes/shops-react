@@ -29,7 +29,6 @@ componentDidMount() {
         this.attachDataChangedListener();
       }
     });
-
 }
 
 componentWillUnmount(){
