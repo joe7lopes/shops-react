@@ -53,7 +53,7 @@ addShops(snapshot){
       snapshot.forEach(shop => {
         featchedShops.push(shop.val());
       });
-      //this.setState({ isLoading:false, shops: featchedShops});
+      this.setState({ isLoading:false, shops: featchedShops});
 }
 
   render(){
