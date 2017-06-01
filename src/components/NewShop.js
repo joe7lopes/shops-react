@@ -139,7 +139,7 @@ render() {
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="comments">Comentarios</label>
+                                    <label for="comments">Comentários</label>
                                     <textarea
                                         id="comments"
                                         class="form-control"
