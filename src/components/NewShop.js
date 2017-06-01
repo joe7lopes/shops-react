@@ -28,10 +28,15 @@ constructor() {
     this.handleImageOnChange = this.handleImageOnChange.bind(this);
     this.handleMapOnChange = this.handleMapOnChange.bind(this);
     this.handleAddressNameOnChange = this.handleAddressNameOnChange.bind(this);
+    this.handleAddressNotFound = this.handleAddressNotFound.bind(this);
 }
 
 componentWillUnmount(){
     clearTimeout(this.state.timeout);
+}
+
+handleAddressNotFound(){
+    //TODO alert address not found.
 }
 
  handleGenericFieldOnchage(event) {
@@ -158,7 +163,7 @@ render() {
                             </div>
                         </div>
                         <div class="col-md-4">
-                             <Map address={address} onChange={this.handleMapOnChange}/>
+                             <Map address={address} onChange={this.handleMapOnChange} onAddressNotFound={this.handleAddressNotFound}/>
                         </div>
                     </div>
                 </div>

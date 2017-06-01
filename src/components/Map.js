@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const LISBON_POSITION = {
   lat: 38.725544,
@@ -21,16 +22,13 @@ class Map extends React.Component{
     }
 
 componentDidMount(){
-    console.log("map did mount");
     this.geocoder = new google.maps.Geocoder();
     this.map = new google.maps.Map(this.refs.map,mapOptions);
 }
 
 componentWillReceiveProps(nextProps) {
-    console.log("received props");
-    const {address} =  this.props;
-    if(address.name) {
-        console.log("has address");
+    const { address } =  this.props;
+    if(address.name){
         this.codeAddress(address.name);
     } 
 }
@@ -56,7 +54,7 @@ codeAddress(address){
             this.map.setCenter(position);
             this.addSingleMarker(position,this.map);
         }else{
-            //console.log("address not found");
+            this.props.onAddressNotFound();
         }
     });
 }
@@ -84,6 +82,12 @@ clearMakers(){
             </div>
         );
     }
+}
+
+Map.propTypes = {
+    address: PropTypes.object.isRequired,
+    onChange: PropTypes.func,
+    onAddressNotFound: PropTypes.func
 }
 
 export default Map;
