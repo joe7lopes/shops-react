@@ -159,7 +159,7 @@ render() {
                                     class="img-responsive"
                                     src={imagePreviewUrl}
                                     alt=""/>
-                                <input type="file" onChange={e => this.handleImageOnChange(e)}/>
+                                <input type="file" accept="image/*" onChange={e => this.handleImageOnChange(e)}/>
                             </div>
                         </div>
                         <div class="col-md-4">
