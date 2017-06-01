@@ -24,6 +24,7 @@ componentDidMount() {
   
     onAuthStateChanged((user) =>{
       if(user){
+        //fist load when app starts
         this.loadShops();
         this.setState({currentUser:user});
         this.attachDataChangedListener();
@@ -52,7 +53,7 @@ addShops(snapshot){
       snapshot.forEach(shop => {
         featchedShops.push(shop.val());
       });
-      this.setState({ isLoading:false, shops: featchedShops});
+      //this.setState({ isLoading:false, shops: featchedShops});
 }
 
   render(){
