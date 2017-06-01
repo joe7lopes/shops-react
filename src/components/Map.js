@@ -21,17 +21,18 @@ class Map extends React.Component{
     }
 
 componentDidMount(){
+    console.log("map did mount");
     this.geocoder = new google.maps.Geocoder();
     this.map = new google.maps.Map(this.refs.map,mapOptions);
-    google.maps.event.addListener(this.map,'click', event =>{
-        this.addSingleMarker(event.latLng,this.map);
-    })
 }
 
 componentWillReceiveProps(nextProps) {
-    if(nextProps.render){
-        this.codeAddress(nextProps.address.name);
-    }
+    console.log("received props");
+    const {address} =  this.props;
+    if(address.name) {
+        console.log("has address");
+        this.codeAddress(address.name);
+    } 
 }
 
 addSingleMarker(position,map){
